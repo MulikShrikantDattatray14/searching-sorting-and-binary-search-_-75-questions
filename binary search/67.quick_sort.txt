@@ -1,0 +1,68 @@
+Quick sort : 
+
+Quick Sort is a widely used sorting algorithm that follows the divide-and-conquer paradigm. The basic idea behind Quick Sort is to choose a pivot element from the array and partition the other elements into two sub-arrays, according to whether they are less than or greater than the pivot. The sub-arrays are then recursively sorted.
+
+Here's a step-by-step explanation of the logic and approach used in Quick Sort:
+
+Choose a Pivot:
+
+1.Select an element from the array to act as the pivot. The choice of the pivot can significantly affect the algorithm's performance.
+2.Common strategies include selecting the first element, the last element, the middle element, or using more advanced techniques like the "median of three" (median of the first, middle, and last elements).
+Partitioning:
+
+Rearrange the array elements such that elements smaller than the pivot are on the left, and elements greater than the pivot are on the right.
+Use two pointers, one starting from the left (i) and one from the right (j), and swap elements to ensure the partitioning.
+Recursion:
+
+After partitioning, the pivot is in its final sorted position.
+Recursively apply the same process to the sub-arrays on the left and right of the pivot until the base case (arrays of size 0 or 1) is reached.
+Combine:
+
+No additional combining step is needed, as the elements are rearranged in place during the partitioning step.
+The pseudocode for the Quick Sort algorithm can be summarized as follows:
+
+
+The efficiency of Quick Sort comes from its ability to quickly divide the array into smaller parts and sort them independently. The average-case time complexity is O(n log n), making it one of the fastest sorting algorithms in practice. However, it's essential to be mindful of the potential worst-case time complexity of O(n^2) when the pivot selection leads to unbalanced partitions.
+
+
+================================================================================================================================================================================================================================
+CODE:-
+----------
+const array = [5, 3, 15, 2, 1, 10, 13];//[1,  2,  3, 5,10, 13, 15]
+quicksort(array, 0, array.length - 1);
+console.log(array)
+
+function quicksort(array, start, end) {
+    if (start >= end) return;
+    let correct_index = rearrange(array, start, end);
+    quicksort(array, start, correct_index - 1);
+    quicksort(array, correct_index + 1, end)
+
+}
+
+function rearrange(A, s, e) {
+    let left = s + 1;
+    let right = e;
+    while (left <= right) {
+        if (A[left] <= A[s]) {
+            left++
+        } else if (A[right] > A[s]) {
+            right--;
+        } else {
+
+            // swap left and right 
+            let temp = A[left];
+            A[left] = A[right];
+            A[right] = temp;
+
+            left++;
+            right--;
+        }
+    }
+    // now left and right are pointing to same element , so now swap the element at 0th index with the element at the index "right"or "left-1" 
+    let temp = A[s];
+    A[s] = A[right];
+    A[right] = temp;
+// return the pivot element index.
+    return right;// element at this index is on correct position , so try sorting the elements on its left and right.
+}

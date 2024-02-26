@@ -1,0 +1,78 @@
+Tens Digit Sorting :-
+
+Problem Description :
+
+Given an array A of N integers. Sort the array in increasing order of the value at the tens place digit of every number.
+
+If a number has no tens digit, we can assume value to be 0.
+If 2 numbers have same tens digit, in that case number with max value will come first
+Solution should be based on comparator.
+
+
+Problem Constraints:-
+
+1 <= N <= 10^5
+
+1 <= A[i] <= 10^9
+
+
+
+Input Format
+First argument A is an array of integers.
+
+
+
+Output Format
+Return the array after sorting
+
+
+
+Example Input
+Input 1:
+A = [15, 11, 7, 19]
+Input 2:
+A = [2, 24, 22, 19]
+
+
+Example Output
+Output 1:
+[7, 19, 15, 11]
+Output 2:
+[2, 19, 24, 22]
+
+
+Example Explanation
+For Input 1:
+The sorted order is [7, 19, 15, 11]. The tens digit of 7 is 0, 
+and that of 19, 15 and 11 is 1.
+For Input 2:
+The sorted order is [2, 19, 24, 22]. The tens digit of 2 is 0, 
+that of 19 is 1 and that of 22 and 24 is 2.
+
+===============================================================================================================================================================================================================================
+
+module.exports = {
+    //param A : array of integers
+    //return a array of integers
+    solve: function (A) {
+        let temp = Array.from(A);
+        temp.sort((a, b) => {
+            let val1 = Math.floor(Number(a) / 10) % 10;
+            let val2 = Math.floor(Number(b) / 10) % 10;
+            if (val1 > val2) return 1;// swap
+            else if (val1 < val2) return -1; // dont swap
+            else if ((val1 == val2) && a > b) return -1;// maximum value should come first, so dont swap
+            else if ((val1 == val2) && a < b) return 1;// swap
+            else return 0;
+
+
+        });
+
+        return temp;
+    }
+};
+
+================================================================================================================================================================================================================================
+note : 
+
+Stable sorting is a property of a sorting algorithm where the relative order of equal elements remains unchanged after the sorting process. In other words, if you have two elements with equal keys in the input array, and one comes before the other, a stable sorting algorithm ensures that the same relative order is maintained in the sorted output.

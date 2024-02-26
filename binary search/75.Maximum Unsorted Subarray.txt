@@ -1,0 +1,188 @@
+Maximum Unsorted Subarray :-
+----------------------------
+
+Problem Description:-
+
+Given an array A of non-negative integers of size N. Find the minimum sub-array Al, Al+1 ,..., Ar such that if we sort(in ascending order) that sub-array, then the whole array should get sorted. If A is already sorted, output -1.
+
+Note :
+Follow 0-based indexing, while returning the sub-array's starting and ending indexes.
+
+Problem Constraints:-
+
+1 <= N <= 106
+1 <= A[i] <= 106
+
+Input Format:-
+First and only argument is an array of non-negative integers of size N.
+
+Output Format:-
+Return an array of length two where,
+the first element denotes the starting index(0-based) and
+the second element denotes the ending index(0-based) of the sub-array.
+If the array is already sorted, return an array containing only one element i.e. -1.
+
+
+Example Input:-
+Input 1:
+
+A = [1, 3, 2, 4, 5]
+Input 2:
+
+A = [1, 2, 3, 4, 5]
+
+
+Example Output
+Output 1:
+
+[1, 2]
+Output 2:
+
+[-1]
+
+
+Example Explanation
+Explanation 1:
+
+If we sort the sub-array [A1, A2] then the whole array A gets sorted.
+Explanation 2:
+
+A is already sorted.
+
+=============================================================================================================
+Brute force approach : 
+
+function findUnsortedSubarray(A) {
+    const n = A.length;
+    let result = [-1]; // Default result for already sorted array
+
+    for (let i = 0; i < n; i++) {
+        for (let j = i; j < n; j++) {
+            let B = [...A]; // Create a copy of the original array
+            merge(B, i, j);
+
+            if (isSorted(B)) {
+                // If the modified array is sorted
+                const diff = j - i;
+                if (result[0] === -1 || diff < (result[1] - result[0])) {
+                    // Update result if it's the first sorted subarray or has a smaller size
+                    result = [i, j];
+                }
+            }
+        }
+    }
+
+    return result;
+}
+
+function merge(arr, left, right) {
+    const temp = arr.slice(left, right + 1).sort((a, b) => a - b);
+    for (let i = left; i <= right; i++) {
+        arr[i] = temp[i - left];
+    }
+}
+
+function isSorted(arr) {
+    for (let i = 1; i < arr.length; i++) {
+        if (arr[i] < arr[i - 1]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Example usage:
+const input1 = [1, 3, 2, 4, 5];
+const input2 = [1, 2, 3, 4, 5];
+
+console.log(findUnsortedSubarray(input1)); // Output: [1, 2]
+console.log(findUnsortedSubarray(input2)); // Output: [-1]
+
+
+==========================================================================================================
+brute force apporach :- NlogN.
+
+module.exports = {
+    //param A : array of integers
+    //return a array of integers
+    subUnsort: function (A) {
+        return subUnsort(A)
+        function subUnsort(A) {
+            const x = [...A];
+            x.sort((a, b) => a - b);
+
+            let start = A.length;
+            let end = 0;
+
+            for (let i = 0; i < x.length; i++) {
+                if (A[i] !== x[i]) {
+                    start = Math.min(start, i);
+                    end = Math.max(end, i);
+                }
+            }
+
+            return end === 0 ? [-1] : [start, end];
+        }
+
+    }
+};
+
+================================================================================================================================================================================================================================
+
+optimised approach :-
+
+
+A = [1, 2, 3, 5, 6, 13, 15, 16, 17, 13, 13, 15, 17, 17, 17, 17, 17, 19, 19]
+let ans = subUnsort(A)
+console.log(ans)
+
+
+function subUnsort(A) {
+    const n = A.length;
+    let i = 0, j = n - 1;
+    // move from oth index towards right till the index where left part is sorted
+    while (i < n - 1 && A[i] <= A[i + 1]) {
+        i++;
+    }
+    // move from n-1th index towards left till the index where right part is sorted
+    while (j > 0 && A[j] >= A[j - 1]) {
+        j--;
+    }
+    // so now i and j are the points between which array is not sorted.
+    if (i === n - 1) {
+        // if i has reached end and where j is still at the initial position , that means array is already sorted.
+        const ans = [-1];
+        return ans;
+    }
+    // if array is already not  sorted.
+    // for now , i is the last index of the left part the innput which is sorted and   j is the first index of the right part the innput which is sorted .
+
+    // here lets store i
+    let mn = A[i + 1], mx = A[i + 1];
+
+    for (let k = i; k <= j; k++) {
+        mx = Math.max(mx, A[k]);
+        mn = Math.min(mn, A[k]);
+    }
+
+    // lets take a example = [ 4,15,4,4,15,18,20] , 
+    //mx and mn , takes into account the elements between i and j .Store minimum among the range in mn so here mn=4 and maximum in the mx, here it is 15.
+    // here i will stop at index 1 and j will stop at index 2
+    //here i will reach till index-1 and j will reach till index-2 , but for final ans to be sorted, we need to swap from index i to 3 , as there is a duplicate element i.e 4.so now lets take j rightwards,inorder to reach the last occurance of the duplicate . similiarly try to move i towards oth index,so as to reach the start of duplicate.
+    // now 
+
+    let l = 0;// start of swap
+    let r = n - 1;//  end of swap
+    // the minimum can also be present before the ith position , 
+    while (A[l] <= mn && l <= i) {
+        l++;
+    }
+    // the maximum can also be present after the jth position , 
+    while (A[r] >= mx && r >= j) {
+        r--;
+    }
+    const ans = [l, r];
+
+    return ans;
+}
+================================================================================================================

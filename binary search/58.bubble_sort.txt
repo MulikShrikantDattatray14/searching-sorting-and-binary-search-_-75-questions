@@ -1,0 +1,44 @@
+
+
+// Bubble sort is a simple sorting algorithm that repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order. 
+
+function bubbleSort(arr) {
+    const n = arr.length;
+
+    for (let i = 0; i < n - 1; i++) {
+        for (let j = 0; j < n - i - 1; j++) {
+            // Compare adjacent elements and swap if they are in the wrong order
+            if (arr[j] > arr[j + 1]) {
+                // Swap
+                [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+            }
+        }
+    }
+
+    return arr;
+}
+
+// Example usage:
+let unsortedArray = [64, 34, 25, 12, 22, 11, 90];
+let sortedArray = bubbleSort(unsortedArray);
+console.log(sortedArray); // Output: [11, 12, 22, 25, 34, 64, 90]
+
+
+
+The time and space complexity of bubble sort and selection sort are as follows:
+
+Bubble Sort:
+
+Time Complexity:
+Worst Case: O(n^2) - Occurs when the input array is in reverse order, and each element needs to be compared and swapped in every pass.
+Best Case: O(n) - Occurs when the array is already sorted, but bubble sort still needs to perform a pass to check.
+Average Case: O(n^2) - Same as the worst case.
+Space Complexity: O(1) - Bubble sort is an in-place sorting algorithm, and it doesn't require additional space proportional to the input size.
+Selection Sort:
+
+Time Complexity:
+Worst Case: O(n^2) - Occurs when the input array is in reverse order, and for each element, the algorithm needs to find the minimum element in the unsorted part of the array.
+Best Case: O(n^2) - Same as the worst case, as the algorithm needs to perform the same number of comparisons and swaps.
+Average Case: O(n^2) - Same as the worst case.
+Space Complexity: O(1) - Similar to bubble sort, selection sort is an in-place sorting algorithm, and it doesn't require additional space proportional to the input size.
+Both bubble sort and selection sort are considered relatively inefficient for large datasets, especially when compared to more advanced sorting algorithms like merge sort or quicksort. However, they are simple and easy to understand, making them suitable for educational purposes or small datasets.

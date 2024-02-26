@@ -1,0 +1,79 @@
+Given 2 arrays A[N] and B[M], calculate the no of pairs i,j such that A[i]>B[j].
+
+===============================================================================================================
+
+brute force :- 
+
+let A = [7, 3, 5];
+let B = [2, 0, 6];//7 
+
+let N = A.length;
+let M = B.length;
+let count = 0;
+for (let i = 0; i < N; i++) {
+    for (let j = 0; j < M; j++) {
+        if (A[i] > B[j]) {
+            count++
+        }
+    }
+}
+console.log(count)
+
+===============================================================================================================
+optimised approach :using merge sort
+
+
+
+let A = [7, 3, 5];
+let B = [2, 0, 6];//7 
+
+let count = 0;
+A = A.sort((a, b) => a - b);
+B = B.sort((a, b) => a - b);
+
+// approach:-
+
+//using the merge sort approach :-
+//1. sort each given input array
+//2. use merge algo(2 sorted array merge)
+
+let ans = solve(A, B)
+console.log(ans)
+
+
+function solve(A, B) {
+    let p1 = 0;
+    let p2 = 0;
+    let p3 = 0;
+    let N = A.length;
+    let M = B.length;
+    let res = [];
+    while (p1 < N && p2 < M) {
+        if (A[p1] > B[p2]) {
+            res[p3] = B[p2];
+
+            p2++;
+            p3++;
+            count = count + (N - p1)
+        }
+        else {
+            res[p3] = A[p1];
+            p1++;
+            p3++;
+        }
+    }
+    while (p1 < N) {
+        res[p3] = A[p1];
+        p1++;
+        p3++;
+    }
+    while (p2 < M) {
+        res[p3] = A[p2];
+        p2++;
+        p3++;
+    }
+    console.log(count)
+    return res;
+}
+
+================================================================================================================================================================================================================================

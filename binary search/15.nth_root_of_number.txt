@@ -1,0 +1,117 @@
+Problem Statement:-
+
+Given two numbers N and M,find the Nth root of M.The nth root of a number M is defined as a number X when raised to the power N equals M. If the ‘nth root is not an integer, return -1.
+
+Examples
+Example 1:
+Input Format: N = 3, M = 27
+Result: 3
+Explanation: The cube root of 27 is equal to 3.
+
+Example 2:
+Input Format: N = 4, M = 69
+Result: -1
+Explanation: The 4th root of 69 does not exist. So, the answer is -1.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Brute Force Approach :
+Algorithm / Intuition
+Solution:
+Approach(Using linear search): 
+We can guarantee that our answer will lie between the range from 1 to m i.e. the given number. So, we will perform a linear search on this range and we will find the number x, such that
+func(x, n) = m. If no such number exists, we will return -1.
+
+Note: func(x, n) returns the value of x raised to the power n i.e. xn.
+
+CODE : 
+
+
+
+
+// Power exponential method:
+function func(b, exp) {
+    let ans = 1;
+    let base = b;
+    while (exp > 0) {
+        if (exp % 2) {
+            exp--;
+            ans = ans * base;
+        }
+        else {
+            exp /= 2;
+            base = base * base;
+        }
+    }
+    return ans;
+}
+
+function NthRoot(n, m) {
+    // Use linear search on the answer space:
+    for (let i = 1; i <= m; i++) {
+        let val = func(i, n);
+        if (val === m) return i;
+        else if (val > m) break;
+    }
+    return -1;
+}
+
+let n = 3, m = 27;
+let ans = NthRoot(n, m);
+console.log("The answer is: " + ans);
+
+Complexity Analysis : 
+Time Complexity: O(M), M = the given number.
+Reason: Since we are using linear search, we traverse the entire answer space.
+
+Space Complexity: O(1) as we are not using any extra space.
+
+///////////////////////////////////////////////////////////////////////////////////////////
+Optimal Approach
+Algorithm / Intuition
+Optimal Approach(Using Binary Search): 
+
+Complexity Analysis
+Time Complexity: O(logN), N = size of the given array.
+Reason: We are basically using binary search to find the minimum.
+
+Space Complexity: O(1)
+Reason: We have not used any extra data structures, this makes space complexity, even in the worst case as O(1).
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// NOTE :-
+// return 1 if ==m;
+// return 0 if <m;
+// return 2 if > m
+
+function func(mid, n, m) {
+    let ans = 1;
+    for (let i = 1; i <= n; i++) {
+        ans = ans * mid;
+        if (ans > m) return 2;
+    }
+    if (ans === m) return 1;
+    return 0;
+}
+
+function NthRoot(n, m) {
+    let low = 1, high = m;
+    while (low <= high) {
+        let mid = Math.floor((low + high) / 2);
+        let midN = func(mid, n, m);
+        if (midN === 1) {
+            return mid;
+        } else if (midN === 0) {//ans we got is much smaller than required one ,  so move towards right to increase the value, our ans is on right side , so eliminate the left part .
+            low = mid + 1;
+        } else {//ans we got is much larger than required so move towards left so move towards left to decrease the value,our ans is on left side , so eliminate the right part 
+            high = mid - 1;
+        }
+    }
+    return -1;
+}
+
+let n = 3, m = 27;
+let ans = NthRoot(n, m);
+console.log("The answer is: " + ans);

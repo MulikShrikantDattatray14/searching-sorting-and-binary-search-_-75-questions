@@ -1,0 +1,115 @@
+Problem Description:
+
+Given an integer array, A of size N.
+You have to find all possible non-empty subsequences of the array of numbers and then,
+for each subsequence, find the difference between the largest and smallest number in that subsequence.
+Then add up all the differences to get the number.
+
+As the number may be large, output the number modulo 1e9 + 7 (1000000007).
+
+NOTE: Subsequence can be non-contiguous.
+
+
+
+Problem Constraints
+1 <= N <= 10000
+
+1<= A[i] <=1000
+
+
+
+Input Format
+First argument is an integer array A.
+
+
+
+Output Format
+Return an integer denoting the output.
+
+
+
+Example Input
+Input 1:
+
+A = [1, 2] 
+Input 2:
+
+A = [3, 5, 10]
+
+
+Example Output
+Output 1:
+
+ 1 
+Output 2:
+
+ 21
+
+
+Example Explanation
+Explanation 1:
+
+All possible non-empty subsets are:
+[1]     largest-smallest = 1 - 1 = 0
+[2]     largest-smallest = 2 - 2 = 0
+[1, 2]  largest-smallest = 2 - 1 = 1
+Sum of the differences = 0 + 0 + 1 = 1
+So, the resultant number is 1 
+Explanation 2:
+
+All possible non-empty subsets are:
+[3]         largest-smallest = 3 - 3 = 0
+[5]         largest-smallest = 5 - 5 = 0
+[10]        largest-smallest = 10 - 10 = 0
+[3, 5]      largest-smallest = 5 - 3 = 2
+[3, 10]     largest-smallest = 10 - 3 = 7
+[5, 10]     largest-smallest = 10 - 5 = 5
+[3, 5, 10]  largest-smallest = 10 - 3 = 7
+Sum of the differences = 0 + 0 + 0 + 2 + 7 + 5 + 7 = 21
+So, the resultant number is 21.
+
+//===============================================================================================================================================================================================================================================================================================================================================
+
+approach :-
+
+let arr=[5,3,10]; has size of 3 , thus total possible subsequence are 2^3 = 8(including the empty subarray).
+
+1.[5]  here max =5 and min=5 , thus differnce is 0
+2.[3] , here max=3, and min=3 , thus differnce is 0.
+3.[10] , here max=10 and min=10, thus differnce is 0.
+4.[5,3], here max=5 and min=3, thus differnce is 2.
+5.[5,10] ,here max=10 and min=5, thus differnce is 5.
+6.[3,10] , here max=10 and min=3, thus difference is 7.
+7.[5,3,10], here max=10 and min=3, thus difference is 7.
+
+ thus sum of all the max= 53 and sum of all min = 32 , thus ans = max-min => 53-32=21.
+
+lets say A=[1,2,3,4,5,6,7];
+
+lets say A[i]=4 ,so now the subarrays having 4 as the maximum elements are - [1,2,3,4] , [2,3,4], [3,4] and [4]
+andthe subarrays having 4 as the minimum elements are - [4,5,6,7] , [4,5,6],[4,5].
+
+so the considering subrrays having 4 as the maximum element- then i elements in total and each has  2 choices and thus 2^i.
+ and  subrrays having 4 as the minimum element- then i elements in total and each has  2 choices and thus 2^(N-i-1).
+
+thus after sorting the array , for every element , no of subsets , where A[i] is the smallest element are 2^i and no of subsets where A[i] is the largest is 2^(N-i-1).
+
+so, contribution of A[i] in our answer is : -
+
+  ans=A[i] *(2^(N-i-1) - 2^i)
+
+ ==============================================================================================================================================================================================================================
+
+ optimised code :-
+
+ let A = [3, 5, 10];
+let N = A.length;
+A = A.sort((a, b) => a - b)
+let sum = 0, max = 0, min = 0;
+let mod = 1000000007;
+for (let i = 0; i < N; i++) {
+    max = (max % mod + (A[i] * (Math.pow(2, i)) % mod) % mod) % mod;//sum of max no in all subsequence
+    min = (min % mod + (A[i] * (Math.pow(2, (N - 1 - i))) % mod) % mod) % mod;//sum of min no in all subsequence
+}
+sum = (max - min + mod) % mod;   //difference of max and min. ans can be negative hence +mod and do modulo
+console.log(sum);

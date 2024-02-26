@@ -1,0 +1,130 @@
+
+Problem Description :-
+
+You are given three positive integers, A, B, and C.
+
+Any positive integer is magical if divisible by either B or C.
+
+Return the Ath smallest magical number. Since the answer may be very large, return modulo 109 + 7.
+
+Note: Ensure to prevent integer overflow while calculating.
+
+Problem Constraints
+1 <= A <= 109
+
+2 <= B, C <= 40000
+
+Input Format
+The first argument given is an integer A.
+
+The second argument given is an integer B.
+
+The third argument given is an integer C.
+
+Output Format
+Return the Ath smallest magical number. Since the answer may be very large, return modulo 109 + 7.
+
+Example Input
+Input 1:
+
+ A = 1
+ B = 2
+ C = 3
+Input 2:
+
+ A = 4
+ B = 2
+ C = 3
+
+
+Example Output
+Output 1:
+
+ 2
+Output 2:
+
+ 6
+
+
+Example Explanation
+Explanation 1:
+
+ 1st magical number is 2.
+Explanation 2:
+
+ First four magical numbers are 2, 3, 4, 6 so the 4th magical number is 6.
+
+ =============================================================================================================================================================================================================================
+solution approach : 
+
+ Say L = lcm(B, C), the least common multiple of B and C, and let f(x) be the number of magical numbers less than or equal to x.
+
+A well known result says that L = (B*C)/gcd(B,C), and that we can calculate the function gcd.
+Then f(x) = x/B + x/C - x/L (floor of all the divisions)
+
+Why?
+
+There are x/B numbers B, 2B, 3B.... that are divisible by B,
+There are x/C numbers C, 2C, 3C.... that are divisible by C,
+We need to subtract the x/L numbers divisible by B and C that we double-counted.
+
+Finally,the answer must be between 0 and A * min(B,C).
+
+If x increases f(x) increases, we can use Binary Search on x to find the Ath number.
+
+Algorithm:
+
+low=1 and high = A * min(B,C)
+while low <= high
+Find mid = (low + high)/2
+Find f(mid) let it be count
+If count>=A then mark it as a answer and try to find smaller number which implies high = mid-1
+Else low = mid+1
+
+Time Complexity: O(log (A * min(B, C))) Space Complexity: O(1).
+
+
+================================================================================================================
+A = 4
+B = 2
+C = 3
+let ans = solve(A, B, C)
+console.log(ans)
+function solve(A, B, C) {
+    let n = A;
+    let a = B;
+    let b = C
+    let mod = (Math.pow(10, 9) + 7);
+
+    let ans;
+    let low = Math.min(a, b);
+    // when only single element starts contributing to the answer,Eg :  A=5 , B=2 and C=100.
+    // so here ans is 10, bcz of 5*2 . since 10 is  very small than 100, we will never
+    //reach 100 or any multiple of 100, so we will confine to only multiple of 2 till
+    // we reach 100 and in this case only B is contributing to answer and thus ans is B*A.
+    let high = n * Math.min(a, b);
+
+    // Finding GCD
+    function gcd(a, b) {
+        if (a == 0)
+            return b;
+        return gcd(b % a, a);
+    }
+
+    let lcm = (a * b) / gcd(a, b);     //(n1*n2)/GCD
+
+    while (low <= high) {
+        let m = Math.floor((low + high) / 2);
+        // f(x) = (x / B) + (x / C) - (x / lcm(B, C))
+        let temp = Math.floor(m / B) + Math.floor(m / C) - Math.floor(m / lcm);
+        if (temp >= A) {
+            ans = m;
+            high = m - 1;
+        } else if (temp < A) {
+            low = m + 1;
+        }
+    }
+    return ans % mod;
+}
+
+=========================================================================================================

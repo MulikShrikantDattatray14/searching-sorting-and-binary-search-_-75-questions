@@ -1,0 +1,37 @@
+Given an N array elements , calculate no of noble integers present . arr[i] is said to be noble if : {no of elements <arr[i]=arr[i]}
+
+eg : let arr = [1, -5, 3, 5, -10, 4] . output is 4.
+ only 3, 5, and 4 has no of elements <arr[i]=arr[i].
+
+brute force : 
+use 2 for loops and try all possible combinations : 
+
+let arr = [1, -5, 3, 5, -10, 4]
+
+let ans = 0;
+for (let i = 0; i < arr.length; i++) {
+    let less = 0;
+    for (let j = 0; j < arr.length; j++) {
+        if (arr[j] < arr[i]) {
+            less++;
+        }
+    }
+   
+    if (less === arr[i]) {
+        ans++;
+    }
+}
+console.log(ans)
+
+========================================================================================================
+optimised code :-
+
+let arr = [1, -5, 3, 5, -10, 4]
+//logic : sort and compare : arr[i]=i;
+let count = 0;
+arr = arr.sort((a, b) => a - b);
+for (let i = 0; i < arr.length; i++) {
+    if (arr[i] == i) count++;
+}
+
+console.log(count)

@@ -1,0 +1,126 @@
+Problem Statement: 
+
+You are given a positive integer n. Your task is to find and return its square root. If ‘n’ is not a perfect square, then return the floor value of ‘sqrt(n)’.
+
+Note: The question explicitly states that if the given number, n, is not a perfect square, our objective is to find the maximum number, x, such that x squared is less than or equal to n (x*x <= n). In other words, we need to determine the floor value of the square root of n.
+
+Examples
+Example 1:
+Input Format: n = 36
+Result: 6
+Explanation: 6 is the square root of 36.
+
+Example 2:
+Input Format: n = 28
+Result: 5
+Explanation: Square root of 28 is approximately 5.292. So, the floor value will be 5.
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+Brute Force Approach  :
+Algorithm / Intuition
+Naive Approach(Using linear search): 
+We can guarantee that our answer will lie between the range from 1 to n i.e. the given number. So, we will perform a linear search on this range and we will find the maximum number x, such that x*x <= n.
+
+CODE : 
+
+function floorSqrt(n) {
+    let ans = 0;
+    // linear search on the answer space
+    for (let i = 1; i <= n; i++) {
+        let val = i * i;
+        if (val <= n) {
+            ans = i;
+        } else {
+            break;
+        }
+    }
+    return ans;
+}
+
+let n = 28;
+let ans = floorSqrt(n);
+console.log("The floor of square root of " + n + " is: " + ans);
+
+
+Complexity Analysis :
+Time Complexity: O(N), N = the given number.
+Reason: Since we are using linear search, we traverse the entire answer space.
+
+Space Complexity: O(1) as we are not using any extra space.
+
+////////////////////////////////////////////////////////////////////////////////////////
+
+Optimal Approach 2:
+Algorithm / Intuition
+Optimal Approach(Using binary search): 
+
+Now, we are not given any sorted array on which we can apply binary search. But, if we observe closely, we can notice that our answer space i.e. [1, n] is sorted. So, we will apply binary search on the answer space.
+
+Complexity Analysis :
+Time Complexity: O(logN), N = size of the given array.
+Reason: We are basically using the Binary Search algorithm.
+
+Space Complexity: O(1) as we are not using any extra space.
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// find the square root of a number:-
+------------------------------------------
+
+
+function floorSqrt(n) {
+    let low = 1;
+    let high = n;
+    // Binary search on the answers:-
+    let ans;
+    while (low <= high) {
+        let mid = Math.floor((low + high) / 2);
+        let val = mid * mid;
+        if (val <= n) {// so ans is on right side , so eliminate the left part.
+            // our objective is to find the maximum number, x, such that x squared is less than or equal to n (x*x <= n). In other words, we need to determine the floor value of the square root of n.
+            ans = mid;
+            low = mid + 1;
+        } else {
+            // Eliminate the right half:
+            high = mid - 1;
+        }
+    }
+    return [high, ans]; // can return either high or ans
+}
+
+//let n = 28;//5
+let n = 81; //6
+let ans = floorSqrt(n);
+console.log("The floor of square root of " + n + " is: " + ans); 
+
+============================================================================================================================================================================
+// find the cuberoot :-
+------------------------
+
+function floorSqrt(n) {
+    let low = 1;
+    let high = n;
+    // Binary search on the answers:
+    let ans;
+    while (low <= high) {
+        let mid = Math.floor((low + high) / 2);
+        let val = mid * mid * mid;
+
+        if (val <= n) {// val is less than equal to n so ,ans lies on the right side , so eliminate  the left part.
+            //our objective is to find the maximum number, x, such that x cubed is less than or equal to n (x*x*x<= n). In other words, we need to determine the floor value of the cube root of n.
+
+            ans = mid;
+            low = mid + 1;
+        } else {
+            // Eliminate the right half:
+            high = mid - 1;
+        }
+    }
+    return [high, ans]; // can return either high or ans
+}
+
+//let n = 28;//5
+let n = 64; //6
+let ans = floorSqrt(n);
+console.log("The floor of square root of " + n + " is: " + ans);
+

@@ -1,0 +1,66 @@
+//https://leetcode.com/problems/find-a-peak-element-ii/description/
+
+A peak element in a 2D grid is an element that is strictly greater than all of its adjacent neighbors to the left, right, top, and bottom.
+
+Given a 0-indexed m x n matrix mat where no two adjacent cells are equal, find any peak element mat[i][j] and return the length 2 array [i,j].
+
+You may assume that the entire matrix is surrounded by an outer perimeter with the value -1 in each cell.
+
+You must write an algorithm that runs in O(m log(n)) or O(n log(m)) time.
+
+/////////////////////////////////////////////////////////////////////////////////
+approach-1 : get the maximum element from the entire 2d matrix
+
+/////////////////////////////////////////////////////////////////////////////////
+approach-2 : follow peak-1 approach solved earlier : 
+
+
+let mat = [
+    [10, 20, 15],
+    [21, 30, 14],
+    [7, 16, 32],
+];
+
+//A peak element in a 2D grid is an element that is strictly greater than all of its adjacent neighbors to the left, right, top, and bottom.
+
+//Output: [1,1]
+//Explanation: Both 30 and 32 are peak elements so [1,1] and [2,2] are both acceptable answers.
+let ans = findPeakGrid(mat);
+console.log(ans);
+function findPeakGrid(mat) {
+    let n = mat.length;
+    let m = mat[0].length;
+    let low = 0;
+    let high = m - 1;
+    while (low <= high) {
+        let mid = Math.floor((low + high) / 2);
+        // here mid is the col index.
+        let maxrowindex = findmaxindex(mat, n, m, mid);
+        //maxrowindex is the row index.
+        let left = mid - 1 >= 0 ? mat[maxrowindex][mid - 1] : -1;
+        let right = mid + 1 < m ? mat[maxrowindex][mid + 1] : -1;
+
+        if (mat[maxrowindex][mid] > left && mat[maxrowindex][mid] > right) {
+            return [maxrowindex, mid];
+        } else if (mat[maxrowindex][mid] < left) {// move leftwards,ignoring the right part
+            high = mid - 1;
+        } else {// ignore the left part
+            low = mid + 1;
+        }
+    }
+    return [-1, -1];
+}
+function findmaxindex(mat, n, m, col) {
+    // n- row ; m-col
+    let maxvalue = -1;
+    let index = -1;
+    //  , move rowwise from 1st row to last row in the same column. and find the max element and its index position.
+    for (let i = 0; i < n; i++) {
+        if (mat[i][col] > maxvalue) {
+            maxvalue = mat[i][col];
+            index = i;
+        }
+    }
+
+    return index;
+}

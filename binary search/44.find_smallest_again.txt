@@ -1,0 +1,115 @@
+
+
+Problem Description:-
+
+Given an integer array A of size N.
+
+If we store the sum of each triplet of the array A in a new list, then find the Bth smallest element among the list.
+
+NOTE: A triplet consists of three elements from the array. Let's say if A[i], A[j], A[k] are the elements of the triplet then i < j < k.
+
+
+
+Problem Constraints
+3 <= N <= 500
+1 <= A[i] <= 108
+1 <= B <= (N*(N-1)*(N-2))/6
+
+
+
+Input Format
+The first argument is an integer array A.
+The second argument is an integer B.
+
+
+
+Output Format
+Return an integer denoting the Bth element of the list.
+
+
+
+Example Input
+Input 1:
+
+ A = [2, 4, 3, 2]
+ B = 3
+Input 2:
+
+ A = [1, 5, 7, 3, 2]
+ B = 9
+
+
+Example Output
+Output 1:
+
+ 9 
+Output 2:
+
+ 14
+
+
+Example Explanation
+Explanation 1:
+
+ All the triplets of the array A are:
+
+ (2, 4, 3) = 9
+ (2, 4, 2) = 8
+ (2, 3, 2) = 7
+ (4, 3, 2) = 9
+
+ So the 3rd smallest element is 9.
+
+ =============================================================================================================================================================================================================================
+ A = [1, 5, 7, 3, 2]
+B = 9
+// find the Bth smallest element among the list.
+let ans = solve(A, B)
+console.log(ans)
+function solve(A, B) {
+    // watch the TA explained solution - on 25th feb 2024 at 1pm
+    let N = A.length;
+    A.sort((a, b) => a - b);
+    let low = 0;
+    //Maximum sum possible is the sum of last 3 elements in a sorted array
+    let high = A[N - 1] + A[N - 2] + A[N - 3];
+    let ans = -1;
+    while (low <= high) {
+        let mid = parseInt((low + high) / 2);
+        // here mid is the sum of triplets
+        //Check the count of triplets for a value of mid
+        if (checkCnt(A, mid) < B) {
+            // as sum increases, count increases.
+            ans = mid;
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+    return ans;
+}
+
+function checkCnt(A, mid) {
+    // returns the number of triplets , less then the sum of triplets i.e mid
+    let count = 0;
+    for (let i = 0; i < A.length; i++) {
+        let j = i + 1, k = A.length - 1;
+        while (j < k) {
+            let sum = A[i] + A[j] + A[k];
+            if (sum < mid) {
+                // now j is fixed .
+                // now i and j is fixed , and now count posibilities for all movements of k.and store in varriable "every"
+                let every = (k - j);
+                // total subarrays 
+                count += every;
+                //we take into consideration all possibility for fixed i and j , while k was moving , so now move j forward and again check all possibiliities for the fixed i and j , where only k is moving
+                j++;
+            } else if (sum >= mid) {
+                k--;
+            }
+        }
+    }
+    return count;
+}
+
+================================================================================================================

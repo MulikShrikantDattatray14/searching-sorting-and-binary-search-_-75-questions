@@ -1,0 +1,187 @@
+Problem Statement:-
+
+ Given an integer array arr of size N,sorted in ascending order (with distinct values). Now the array is rotated between 1 to N times which is unknown. Find the minimum element in the array. 
+
+Pre-requisites: Search in Rotated Sorted Array I,  Search in Rotated Sorted Array II & Binary Search algorithm
+
+Examples
+Example 1:
+Input Format: arr = [4,5,6,7,0,1,2,3]
+Result: 0
+Explanation: Here, the element 0 is the minimum element in the array.
+
+Example 2:
+Input Format: arr = [3,4,5,1,2]
+Result: 1
+Explanation: Here, the element 1 is the minimum element in the array.
+////////////////////////////////////////////////////////////////////////////////////////
+
+Solution 1:
+Algorithm / Intuition
+Naive Approach (Brute force): 
+One straightforward approach, we can consider is using the linear search algorithm. Using this method, we will find the minimum number from the array.
+
+CODE : 
+
+
+function findMin(arr) {
+    let n = arr.length; // size of the array.
+    let mini = Infinity;
+    for (let i = 0; i < n; i++) {
+        // Always keep the minimum.
+        mini = Math.min(mini, arr[i]);
+    }
+    return mini;
+}
+
+let arr = [4, 5, 6, 7, 0, 1, 2, 3];
+let ans = findMin(arr);
+console.log("The minimum element is: " + ans);
+
+Complexity Analysis :
+Time Complexity: O(N), N = size of the given array.
+Reason: We have to iterate through the entire array to check if the target is present in the array.
+
+Space Complexity: O(1)
+Reason: We have not used any extra data structures, this makes space complexity, even in the worst case as O(1).
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Solution 2:
+Algorithm / Intuition :
+Further Optimization(Using Binary Search):
+If both the left and right halves of an index are sorted, it implies that the entire search space between the low and high indices is also sorted. In this case, there is no need to conduct a binary search within that segment to determine the minimum value. Instead, we can simply select the leftmost element as the minimum.
+
+The condition to check will be arr[low] <= arr[mid] && arr[mid] <= arr[high]. We can shorten this into arr[low] <= arr[high] as well.
+
+If arr[low] <= arr[high]: In this case, the array from index low to high is completely sorted. Therefore, we can simply select the minimum element, arr[low], and update the ‘ans’ variable with the minimum value i.e. min(ans, arr[low]). Once this is done, there is no need to continue with the binary search algorithm.
+
+
+
+Complexity Analysis :
+Time Complexity: O(logN), N = size of the given array.
+Reason: We are basically using binary search to find the minimum. 
+
+Space Complexity: O(1)
+Reason: We have not used any extra data structures, this makes space complexity, even in the worst case as O(1).
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// array contains only unique elements
+function findMin(arr) {
+    let low = 0;
+    let high = arr.length - 1;
+    let ans = Infinity;
+    while (low <= high) {
+        let mid = Math.floor((low + high) / 2);
+        //search space is already sorted
+        //then arr[low] will always be
+        //the minimum in that search space:
+        if (arr[low] <= arr[high]) {
+            ans = Math.min(ans, arr[low]);
+            break;
+        }
+        // If left part is sorted:
+        if (arr[low] <= arr[mid]) {
+            // Keep the minimum:
+            ans = Math.min(ans, arr[low]);
+            // now you took minimum from the left half and now Eliminate left half:
+            low = mid + 1;
+        } else {
+            // If right part is sorted:
+            // Keep the minimum:
+            ans = Math.min(ans, arr[mid]);
+            // now you took minimum from the right half and now Eliminate right half:
+            high = mid - 1;
+        }
+    }
+    return ans;
+}
+
+let arr = [4, 5, 6, 7, 0, 1, 2, 3];
+let ans = findMin(arr);
+console.log("The minimum element is: " + ans);
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+154. Find Minimum in Rotated Sorted Array II :-
+https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/description/
+
+Suppose an array of length n sorted in ascending order is rotated between 1 and n times. For example, the array nums = [0,1,4,4,5,6,7] might become:
+
+[4,5,6,7,0,1,4] if it was rotated 4 times.
+[0,1,4,4,5,6,7] if it was rotated 7 times.
+Notice that rotating an array [a[0], a[1], a[2], ..., a[n-1]] 1 time results in the array [a[n-1], a[0], a[1], a[2], ..., a[n-2]].
+
+Given the sorted rotated array nums that may contain duplicates, return the minimum element of this array.
+
+You must decrease the overall operation steps as much as possible.
+
+ 
+
+Example 1:
+
+Input: nums = [1,3,5]
+Output: 1
+Example 2:
+
+Input: nums = [2,2,2,0,1]
+Output: 0
+ 
+
+Constraints:
+
+n == nums.length
+1 <= n <= 5000
+-5000 <= nums[i] <= 5000
+nums is sorted and rotated between 1 and n times.
+
+========================================================================================================
+code handling duplicate : 
+=============================================================================================
+
+//https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/description/
+// array contains duplicate elements
+
+//https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/description/
+// array contains duplicate elements
+function findMin(arr) {
+    let low = 0;
+    let high = arr.length - 1;
+    let ans = Infinity;
+    while (low <= high) {
+        let mid = Math.floor((low + high) / 2);
+
+        // Check if the search space is already sorted
+        if (arr[low] < arr[high]) {
+            ans = Math.min(ans, arr[low]);
+            break;
+        }
+        //Handle duplicates by moving pointers towards the center, thus shrinking the search space.
+        while (low < mid && arr[low] === arr[mid]) {
+            low++;
+        }
+        while (mid < high && arr[mid] === arr[high]) {
+            high--;
+        }
+
+        // If left part is sorted:
+        if (arr[low] <= arr[mid]) {
+            // Keep the minimum:
+            ans = Math.min(ans, arr[low]);
+
+            // pick minimum element from left half and Eliminate left half:
+            low = mid + 1;
+        } else {
+            // If right part is sorted:
+            // Keep the minimum:
+            ans = Math.min(ans, arr[mid]);
+
+            // pick minimum element from right half and Eliminate right half:
+            high = mid - 1;
+        }
+    }
+    return ans;
+}
+
+let arr = [4, 5, 5, 5, 6, 7, -1, 10, 1, 1, 1, 1, 2, 3];
+let ans = findMin(arr);
+console.log("The minimum element is: " + ans);

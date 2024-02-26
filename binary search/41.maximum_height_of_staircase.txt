@@ -1,0 +1,81 @@
+Problem Description :-
+
+Given an integer A representing the number of square blocks. The height of each square block is 1. The task is to create a staircase of max-height using these blocks.
+
+The first stair would require only one block, and the second stair would require two blocks, and so on.
+
+Find and return the maximum height of the staircase.
+
+
+Problem Constraints :-
+0 <= A <= 10^9
+
+Input Format:-
+The only argument given is integer A.
+
+
+Output Format:-
+Return the maximum height of the staircase using these blocks.
+
+
+
+Example Input
+Input 1:
+
+ A = 10
+Input 2:
+
+ A = 20
+
+
+Example Output
+Output 1:
+
+ 4
+Output 2:
+
+ 5
+
+
+Example Explanation
+Explanation 1:
+
+ The stairs formed will have height 1, 2, 3, 4.
+Explanation 2:
+
+ The stairs formed will have height 1, 2, 3, 4, 5.
+
+
+================================================================================================================================================================
+
+let A1 = 10 //4
+let A2 = 20//5
+let ans1 = findMaximumValue(A1);
+console.log(ans1)
+let ans2 = findMaximumValue(A2);
+console.log(ans2)
+function findMaximumValue(A) {
+    let lo = 0;
+    let hi = 100000;
+
+    let ans = 0;
+    // logic : sum of first n natural numbers >= A;
+    //eg: if A=20 ; so it will be 1+2+3+4+5.. sum from 1 to 5 is 
+    //15 which is less than 20, if we add further elements ,say 6, then then sum cross
+    // given value of A i.e 20 , so lets stop at 5 and thus it becomes our answer.
+    // formula =( n*(n+1))/2
+    while (lo <= hi) {
+        let mid = Math.floor((lo + hi) / 2);
+        let sum = parseInt((mid * (mid + 1)) / 2)
+        if (sum <= A) {
+            ans = mid;
+            lo = mid + 1;
+        } else {
+            hi = mid - 1;
+        }
+    }
+    return ans;
+}
+
+
+ =====================================================================
